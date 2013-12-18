@@ -1,18 +1,27 @@
 <?php
 
-use
-    Sabre\DAV;
+use Sabre\DAV;
+
+date_default_timezone_set('UTC');
 
 require_once 'vendor/autoload.php';
 
-// Now we're creating a whole bunch of objects
+$u = 'tobi';
+$p = '1234';
 
-// Change public to something else, if you are using a different directory for your files
-$rootDirectory = new DAV\FS\Directory('public');
+$auth = new \Sabre\HTTP\DigestAuth();
+$auth->init();
 
-// The server object is responsible for making sense out of the WebDAV protocol
+if ($auth->getUsername() != $u || !$auth->validatePassword($p)) {
+    $auth->requireLogin();
+    echo "Authentication required\n";
+    die();
+}
+
+$rootDirectory = new DAV\FS\Directory('data');
+
 $server = new DAV\Server($rootDirectory);
-$server->setBaseUri('/'); // ideally, SabreDAV lives on a root directory with mod_rewrite sending every request to server.php
+$server->setBaseUri('/');
 
 // The lock manager is reponsible for making sure users don't overwrite each others changes. Change 'data' to a different
 // directory, if you're storing your data somewhere else.
@@ -23,7 +32,7 @@ $server->addPlugin($lockPlugin);
 $plugin = new DAV\Browser\Plugin();
 $server->addPlugin($plugin);
 
-// All we need to do now, is to fire up the server
+
 $server->exec();
 
 ?>
