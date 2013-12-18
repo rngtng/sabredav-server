@@ -1,7 +1,14 @@
 RewriteEngine on
-
 RewriteBase /
+
+# Found here: https://www.df.eu/forum/threads/40007-mit-htaccess-auf-ssl-verweisen/page3
+RewriteCond %{REMOTE_ADDR} !^62.67.200.4$
+RewriteRule ^(.*)$ https://sslsites.de/%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 RewriteRule .* server.php [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
+# Debugger: https://sslsites.de/ihre-domain.tld/system-cgi/cgi-debug/
+# More: https://www.df.eu/forum/threads/25522-Besucher-IP-Adresse-und-sslsites-de
 
 # Output buffering needs to be off, to prevent high memory usage
 # php_flag output_buffering off
