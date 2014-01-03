@@ -1,0 +1,3 @@
+[submodule "baikal"]
+	path = baikal
+	url = https://github.com/jeromeschneider/Baikal.git
