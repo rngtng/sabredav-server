@@ -9,6 +9,20 @@ require_once 'vendor/autoload.php';
 $baseUri = '/dav.warteschlange.de';
 $_SERVER['REQUEST_URI'] =  $baseUri.$_SERVER['REQUEST_URI'];
 
+$myFile = "requestslog.txt";
+$fh = fopen($myFile, 'a') or die("can't open file");
+fwrite($fh, "\n\n---------------------------------------------------------------\n");
+foreach($_SERVER as $h => $v) {
+  // if(ereg('HTTP_(.+)', $h, $hp)) {
+    fwrite($fh, "$h = $v\n");
+  // }
+}
+fwrite($fh, "\r\n");
+fwrite($fh, file_get_contents('php://input'));
+fclose($fh);
+
+
+
 $pdo = new PDO(MYSQL_HOST, MYSQL_USER, MYSQL_PASS);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

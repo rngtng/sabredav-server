@@ -3,3 +3,4 @@ composer.phar
 vendor/
 ftpsync.settings
 config.php
+requestslog.txt
